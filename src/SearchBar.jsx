@@ -132,6 +132,7 @@ class SearchBar extends React.Component {
               <span
                 className="icon search-bar-clear"
                 onClick={() => this.setState(this.initialState)}>
+                x
               </span> }
           <input
             className="icon search-bar-submit"
