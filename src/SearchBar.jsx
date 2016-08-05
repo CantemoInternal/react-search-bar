@@ -56,6 +56,14 @@ class SearchBar extends React.Component {
       nextItem = (item === lastItem) ? 0 : item + 1;
     }
 
+    if (item == 0 && lastItem == suggestions.length -1 && nextItem == suggestions.length - 1) {
+      nextItem = -1;
+    }
+
+    this.props.onChange(suggestions[nextItem], function(){});
+    if (nextItem == 0) {
+      this.setState({prevValue: this.state.value});
+    };
     this.setState({
       highlightedItem: nextItem,
       value: suggestions[nextItem]
@@ -89,11 +97,20 @@ class SearchBar extends React.Component {
         break;
 
       case keyCodes.ENTER:
-        this.search();
+        if (this.state.suggestions.length > 0 && this.state.highlightedItem != -1) {
+          e.preventDefault();
+          this.setState({ suggestions: [] });
+          this.props.onChange(this.state.value, function(){});
+        }
         break;
 
       case keyCodes.ESCAPE:
-        this.refs.input.blur();
+        if (this.state.suggestions && this.state.prevValue) {
+          this.setState({ suggestions: [], value: this.state.prevValue });
+          this.props.onChange(this.state.prevValue, function(){});
+        } else {
+          this.setState({ suggestions: [] });
+        }
         break;
     }
   }
@@ -101,7 +118,7 @@ class SearchBar extends React.Component {
     this.setState({value: suggestion}, () => this.search());
   }
   onSearch(e) {
-    e.preventDefault();
+    //e.preventDefault();
     this.search();
   }
   render() {
