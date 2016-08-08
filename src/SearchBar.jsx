@@ -146,7 +146,10 @@ class SearchBar extends React.Component {
             ref="input"
             value={this.state.value}
             placeholder={this.props.placeholder}
-            onChange={this.onChange.bind(this)}
+            onChange={(e) => {
+              this.setState({prevValue: e.target.value})
+              this.onChange(e);
+            }}
             onBlur={() => this.setState({isFocused: false, suggestions: []})}
             onKeyDown={this.state.suggestions && this.onKeyDown.bind(this)}
             onFocus={() => this.setState({isFocused: true})} />
