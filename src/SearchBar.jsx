@@ -49,24 +49,29 @@ class SearchBar extends React.Component {
     const {highlightedItem: item, suggestions} = this.state;
     const lastItem = suggestions.length - 1;
     let nextItem;
-
+    let value;
     if (key === keyCodes.UP) {
       nextItem = (item <= 0) ? lastItem : item - 1;
     } else {
       nextItem = (item === lastItem) ? 0 : item + 1;
     }
+    value = suggestions[nextItem];
 
     if (item == 0 && lastItem == suggestions.length -1 && nextItem == suggestions.length - 1) {
       nextItem = -1;
+      value = this.state.prevValue;
     }
 
-    this.props.onChange(suggestions[nextItem], function(){});
-    if (nextItem == 0) {
-      this.setState({prevValue: this.state.value});
+    this.props.onChange(value, function(){});
+    if (nextItem == 0 && item == -1) {
+      this.setState({ prevValue: this.state.value });
+    };
+    if (nextItem == suggestions.length - 1 && lastItem == suggestions.length - 1 && item == -1) {
+      this.setState({ prevValue: this.state.value });
     };
     this.setState({
       highlightedItem: nextItem,
-      value: suggestions[nextItem]
+      value: value
     });
   }
   search() {
@@ -148,7 +153,10 @@ class SearchBar extends React.Component {
             { this.state.value &&
               <span
                 className="icon search-bar-clear"
-                onClick={() => this.setState(this.initialState)}>
+                onClick={() => {
+                  this.setState({ value: "" });
+                  this.props.onChange("", function () {});
+                }}>
                 x
               </span> }
           <input
