@@ -20,8 +20,13 @@ class SearchBar extends React.Component {
       highlightedItem: -1,
       searchTerm: '',
       suggestions: [],
-      value: ''
+      value: this.props.value || ''
     };
+  }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value !== nextProps.value) {
+      this.setState({value: nextProps.value});
+    }  
   }
   componentDidMount() {
     if (this.props.autoFocus) {
@@ -48,6 +53,9 @@ class SearchBar extends React.Component {
   scroll(key) {
     const {highlightedItem: item, suggestions} = this.state;
     const lastItem = suggestions.length - 1;
+    if (suggestions.length === 0) {
+      return;
+    }
     let nextItem;
     let value;
     if (key === keyCodes.UP) {
@@ -88,7 +96,6 @@ class SearchBar extends React.Component {
   onChange(e) {
     clearTimeout(this.timer);
     const input = e.target.value;
-    if (!input) return this.setState(this.initialState);
     this.setState({value: input});
     this.timer = setTimeout(() => this.autosuggest(), this.props.delay);
   }
