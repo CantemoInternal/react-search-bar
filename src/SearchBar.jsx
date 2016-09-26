@@ -34,7 +34,7 @@ class SearchBar extends React.Component {
     }
   }
   normalizeInput() {
-    return this.state.value.toLowerCase().trim();
+    return this.state.value.trim();
   }
   autosuggest() {
     const searchTerm = this.normalizeInput();
