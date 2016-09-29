@@ -38,7 +38,6 @@ class SearchBar extends React.Component {
   }
   autosuggest() {
     const searchTerm = this.normalizeInput();
-    if (!searchTerm) return;
     new Promise((resolve) => {
       this.props.onChange(searchTerm, resolve);
     }).then((suggestions) => {
